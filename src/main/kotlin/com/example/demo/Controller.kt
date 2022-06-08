@@ -1,7 +1,14 @@
 package com.example.demo
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.module.SimpleModule
+import com.fasterxml.jackson.module.kotlin.addDeserializer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
+import org.springframework.core.io.ClassPathResource
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,6 +28,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.HttpSession
 import kotlin.collections.HashMap
+import kotlin.collections.LinkedHashSet
 
 
 @Controller
@@ -78,5 +86,20 @@ class Controller {
                             "' because an existing model object of the same name")
         }
         model[variableName] = requestContext
+    }
+    @GetMapping("/json")
+    @ResponseBody
+    fun getJson(): ResponseEntity<String> {
+        var objectMapper = ObjectMapper()
+        var simpleModule = SimpleModule()
+        simpleModule.addDeserializer(Menu::class,MenuDeserializer())
+        objectMapper.registerModule(simpleModule)
+        var classPathResource = ClassPathResource("static/test.json")
+        var file = classPathResource.file
+        var menu = objectMapper.readValue(file, object: TypeReference<LinkedHashSet<Menu>>(){})
+        var s = objectMapper.writeValueAsString(menu)
+
+        return ResponseEntity.ok().body(s.replace("\r\n", "<br>"))
+
     }
 }

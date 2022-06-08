@@ -1,0 +1,31 @@
+
+   [
+    {
+      "href": "",
+      "text": "menu-1",
+      "menu": [
+        {
+          "href": "/api/menu/1/1",
+          "text": "submenu1-1"
+        },
+        {
+          "href": "/api/menu/1/2",
+          "text": "submenu1-2"
+        }
+      ]
+    },
+    {
+      "href": "",
+      "text": "menu-2",
+      "menu": [
+        {
+          "href": "/api/menu/2/1",
+          "text": "submenu2-1"
+        },
+        {
+          "href": "/api/menu/2/2",
+          "text": "submenu2-2"
+        }
+      ]
+    }
+  ]
